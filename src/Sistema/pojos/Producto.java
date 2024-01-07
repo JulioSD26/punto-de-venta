@@ -20,8 +20,10 @@ public class Producto {
     private double precioCompraProducto;
     private double precioVentaProducto;
     private double existenciasProducto;
+    private int idCategoria;
+    private int idProveedor;
 
-    public Producto(String idProducto, String nomProducto, String descProducto, double stockProducto, File fotoProducto, String unidadProducto, double precioCompraProducto, double precioVentaProducto, double existenciasProducto) {
+    public Producto(String idProducto, String nomProducto, String descProducto, double stockProducto, File fotoProducto, String unidadProducto, double precioCompraProducto, double precioVentaProducto, double existenciasProducto, int idCategoria, int idProveedor) {
         this.idProducto = idProducto;
         this.nomProducto = nomProducto;
         this.descProducto = descProducto;
@@ -31,6 +33,8 @@ public class Producto {
         this.precioCompraProducto = precioCompraProducto;
         this.precioVentaProducto = precioVentaProducto;
         this.existenciasProducto = existenciasProducto;
+        this.idCategoria = idCategoria;
+        this.idProveedor = idProveedor;
     }
 
     public double getExistenciasProducto() {
@@ -105,6 +109,21 @@ public class Producto {
         this.precioVentaProducto = precioVentaProducto;
     }
     
-    
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    public int getIdProveedor() {
+        return idProveedor;
+    }
+
+    public void setIdProveedor(int idProveedor) {
+        this.idProveedor = idProveedor;
+    }
+
     
 }
