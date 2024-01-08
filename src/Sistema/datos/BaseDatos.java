@@ -1,6 +1,8 @@
 package sistema.datos;
 
-import Sistema.pojos.Producto;
+import Sistema.pojos.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,6 +31,7 @@ public class BaseDatos {
     public void insertarProducto(Producto producto){
         try {
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/db-sistema", "postgres", "admin");
+            FileInputStream fis = new FileInputStream(producto.getFotoProducto());
             
             String sql = "INSERT INTO cat_productos(id_prod, nombre_prod, desc_prod, stock_prod, foto_prod, unidad_prod, precio_compra_prod, precio_venta_prod, existencias_prod, id_categoria_prod, id_proveedor)"
                     + " values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -49,6 +52,8 @@ public class BaseDatos {
             st.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally{
             try {
@@ -60,4 +65,122 @@ public class BaseDatos {
         }
     }
     
+    public void insertarCategoriaProducto(CategoriaProd categoria){
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/db-sistema", "postgres", "admin");
+            
+            String sql = "INSERT INTO cat_categorias (nom_categoria_prod, desc_categoria_prod)"
+                    + "VALUES (?, ?)";
+            st = conn.prepareStatement(sql);
+            
+            st.setString(1, categoria.getNomCategoriaProd());
+            st.setString(2, categoria.getDescCategoriaProd());
+            
+            st.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        finally{
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            
+        }
+    }
+    
+    public void insertarProveedor(Proveedor prov){
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/db-sistema", "postgres", "admin");
+            
+            String sql = "INSERT INTO cat_proveedores (nom_proveedor, dir_proveedor, telefono_proveedor, email_proveedor, contacto_proveedor)"
+                    + "VALUES (?, ?, ?, ?, ?)";
+            
+            st = conn.prepareStatement(sql);
+            
+            st.setString(1, prov.getNomProveedor());
+            st.setString(2, prov.getDirProveedor());
+            st.setString(3, prov.getTelProveedor());
+            st.setString(4, prov.getEmailProveedor());
+            st.setString(5, prov.getContactoProveedor());
+            
+            st.executeUpdate();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+    }
+    
+    public void insertarVenta(Venta venta){
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/db-sistema", "postgres", "admin");
+            
+            String sql = "INSERT INTO ventas (monto_venta, fecha_venta)"
+                    + "VALUES (?, ?)";
+            
+            st = conn.prepareStatement(sql);
+            
+            st.setDouble(1, venta.getMontoVenta());
+            st.setDate(2, venta.getFechaVenta());
+            
+            st.executeUpdate();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+    }
+    
+    public void insertarDetalleVenta(DetalleVenta detalle){
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/db-sistema", "postgres", "admin");
+            
+            String sql = "INSERT INTO detalle_venta (id_venta, id_producto, cantidad_vendida)"
+                    + "VALUES (?, ?, ?)";
+            
+            st = conn.prepareStatement(sql);
+            
+            st.setInt(1, detalle.getIdVenta());
+            st.setInt(2, detalle.getIdProducto());
+            st.setDouble(3, detalle.getCantidadVendida());
+            
+            st.executeUpdate();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+    }
 }

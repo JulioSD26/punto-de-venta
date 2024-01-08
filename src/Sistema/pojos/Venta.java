@@ -12,20 +12,20 @@ import java.sql.Date;
 public class Venta {
     private int idVenta;
     private double montoVenta;
-    private Date fecha;
+    private Date fechaVenta;
 
-    public Venta(int idVenta, double montoVenta, Date fecha) {
+    public Venta(int idVenta, double montoVenta, Date fechaVenta) {
         this.idVenta = idVenta;
         this.montoVenta = montoVenta;
-        this.fecha = fecha;
+        this.fechaVenta = fechaVenta;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaVenta() {
+        return fechaVenta;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaVenta(Date fecha) {
+        this.fechaVenta = fechaVenta;
     }
 
     public int getIdVenta() {
