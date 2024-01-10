@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -184,6 +185,93 @@ public class BaseDatos {
         
     }
     
+    public ArrayList<Producto> obtenerProductos (){
+        // lista de productos
+        ArrayList<Producto> listaProductos = new ArrayList<Producto>();
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
+            
+            String sql = "SELECT * FROM cat_productos";
+            
+            st = conn.prepareStatement(sql);
+            
+            rs = st.executeQuery();
+            
+            while(rs.next()){
+                String id = rs.getString("id_prod");
+                String nombre = rs.getString("nombre_prod");
+                String descripcion = rs.getString("desc_prod");
+                double stock = rs.getDouble("stock_prod");
+                //String foto = rs.getString("foto_prod");
+                String unidad = rs.getString("unidad_prod");
+                double precioCompra = rs.getDouble("precio_compra_prod");
+                double precioVenta = rs.getDouble("precio_venta_prod");
+                double existencias = rs.getDouble("existencias_prod");
+                int idCategoria = rs.getInt("id_categoria_prod");
+                int idProveedor = rs.getInt("id_proveedor");
+                
+                Producto producto = new Producto(id, nombre, descripcion, stock, null,
+                unidad, precioCompra, precioVenta, existencias, idCategoria, idProveedor);
+                
+                // añadir cada producto a la lista
+                listaProductos.add(producto);
+                
+            }
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return listaProductos;
+    }
+    
+    public ArrayList<CategoriaProd> obtenerCategorias (){
+        // lista de productos
+        ArrayList<CategoriaProd> listaCategorias = new ArrayList<CategoriaProd>();
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
+            
+            String sql = "SELECT * FROM cat_categorias";
+            
+            st = conn.prepareStatement(sql);
+            
+            rs = st.executeQuery();
+            
+            while(rs.next()){
+                
+                int id = rs.getInt("id_categoria_prod");
+                String nombre = rs.getString("nom_categoria_prod");
+                String descripcion = rs.getString("desc_categoria_prod");
+                
+                CategoriaProd categoria = new CategoriaProd(id, nombre, descripcion);
+                
+                // añadir cada producto a la lista
+                listaCategorias.add(categoria);
+                
+            }
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return listaCategorias;
+    }
     // PROBAR BASE DE DATOS
 //    public static void main(String[] args) {
 //        CategoriaProd categoria = new CategoriaProd(1, "Categoria de prueba", "Descripcion de la categoria de prueba");
