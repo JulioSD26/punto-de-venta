@@ -30,7 +30,7 @@ public class BaseDatos {
     
     public void insertarProducto(Producto producto){
         try {
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/db-sistema", "postgres", "admin");
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
             FileInputStream fis = new FileInputStream(producto.getFotoProducto());
             
             String sql = "INSERT INTO cat_productos(id_prod, nombre_prod, desc_prod, stock_prod, foto_prod, unidad_prod, precio_compra_prod, precio_venta_prod, existencias_prod, id_categoria_prod, id_proveedor)"
@@ -67,7 +67,7 @@ public class BaseDatos {
     
     public void insertarCategoriaProducto(CategoriaProd categoria){
         try {
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/db-sistema", "postgres", "admin");
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
             
             String sql = "INSERT INTO cat_categorias (nom_categoria_prod, desc_categoria_prod)"
                     + "VALUES (?, ?)";
@@ -96,7 +96,7 @@ public class BaseDatos {
     public void insertarProveedor(Proveedor prov){
         
         try {
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/db-sistema", "postgres", "admin");
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
             
             String sql = "INSERT INTO cat_proveedores (nom_proveedor, dir_proveedor, telefono_proveedor, email_proveedor, contacto_proveedor)"
                     + "VALUES (?, ?, ?, ?, ?)";
@@ -128,7 +128,7 @@ public class BaseDatos {
     public void insertarVenta(Venta venta){
         
         try {
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/db-sistema", "postgres", "admin");
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
             
             String sql = "INSERT INTO ventas (monto_venta, fecha_venta)"
                     + "VALUES (?, ?)";
@@ -157,7 +157,7 @@ public class BaseDatos {
     public void insertarDetalleVenta(DetalleVenta detalle){
         
         try {
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:8080/db-sistema", "postgres", "admin");
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
             
             String sql = "INSERT INTO detalle_venta (id_venta, id_producto, cantidad_vendida)"
                     + "VALUES (?, ?, ?)";
@@ -183,4 +183,13 @@ public class BaseDatos {
         }
         
     }
+    
+    // PROBAR BASE DE DATOS
+//    public static void main(String[] args) {
+//        CategoriaProd categoria = new CategoriaProd(1, "Categoria de prueba", "Descripcion de la categoria de prueba");
+//        
+//        BaseDatos base = new BaseDatos();
+//        
+//        base.insertarCategoriaProducto(categoria);
+//    }
 }
