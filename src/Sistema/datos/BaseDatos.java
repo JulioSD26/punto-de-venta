@@ -272,6 +272,49 @@ public class BaseDatos {
         }
         return listaCategorias;
     }
+    
+     public ArrayList<Proveedor> obtenerProveedores (){
+        // lista de productos
+        ArrayList<Proveedor> listaProveedores = new ArrayList<Proveedor>();
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
+            
+            String sql = "SELECT * FROM cat_proveedores";
+            
+            st = conn.prepareStatement(sql);
+            
+            rs = st.executeQuery();
+            
+            while(rs.next()){
+                
+                int id = rs.getInt("id_proveedor");
+                String nombre = rs.getString("nom_proveedor");
+                String direccion = rs.getString("dir_proveedor");
+                String telefono = rs.getString("telefono_proveedor");
+                String email = rs.getString("email_proveedor");
+                String contacto = rs.getString("contacto_proveedor");
+                
+                Proveedor proveedor = new Proveedor(id, nombre, direccion, telefono, email, contacto);
+                
+                // añadir cada producto a la lista
+                listaProveedores.add(proveedor);
+                
+            }
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return listaProveedores;
+    }
     // PROBAR BASE DE DATOS
 //    public static void main(String[] args) {
 //        CategoriaProd categoria = new CategoriaProd(1, "Categoria de prueba", "Descripcion de la categoria de prueba");
