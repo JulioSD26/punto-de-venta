@@ -4,19 +4,72 @@
  */
 package Sistema.gui;
 
+import Sistema.pojos.Producto;
+import java.util.ArrayList;
 import javax.swing.JDialog;
+import javax.swing.table.DefaultTableModel;
+import sistema.datos.BaseDatos;
 
 /**
  *
  * @author Julio
  */
 public class InventariosFrame extends javax.swing.JInternalFrame {
+    
+    // Crear una instancia de la tabla de productos
+    DefaultTableModel modeloTabla = new DefaultTableModel();
+    // Referencia a la base de datos
+    BaseDatos base = new BaseDatos();
 
     /**
      * Creates new form Inventarios
      */
     public InventariosFrame() {
         initComponents();
+        
+        // inicializar el metodo para cargar los productos en la tabla
+        cargarModeloTabla();
+    }
+    
+    // crear método para cargar los productos en la tabla
+    private void cargarModeloTabla(){
+        modeloTabla.addColumn("Clave");
+        modeloTabla.addColumn("Nombre");
+        modeloTabla.addColumn("Unidad");
+        modeloTabla.addColumn("Precio Compra");
+        modeloTabla.addColumn("Precio Venta");
+        modeloTabla.addColumn("Existencias");
+        
+        // consultar la base de datos
+        ArrayList<Producto> listaProductos = base.obtenerProductos();
+        
+        /*
+            Se utiliza el metodo SetValueAt para poner el valor en la tabla,
+            pero primero se debe de establecer el núm. de filas y columnas
+            Esto se puede lograr con sacar el tamaño de listaProductos
+        */
+        
+        int numeroProductos = listaProductos.size();
+        modeloTabla.setNumRows(numeroProductos);
+        
+        // recorrer el arraylist en un for
+        for (int i = 0; i < numeroProductos; i++) {
+            Producto producto = listaProductos.get(i);
+            String clave = producto.getIdProducto();
+            String nombre = producto.getNomProducto();
+            String unidad = producto.getUnidadProducto();
+            Double precioCompra = producto.getPrecioCompraProducto();
+            Double precioVenta = producto.getPrecioVentaProducto();
+            Double existencias = producto.getExistenciasProducto();
+            
+            modeloTabla.setValueAt(clave, i, 0);
+            modeloTabla.setValueAt(nombre, i, 1);
+            modeloTabla.setValueAt(unidad, i, 2);
+            modeloTabla.setValueAt(precioCompra, i, 3);
+            modeloTabla.setValueAt(precioVenta, i, 4);
+            modeloTabla.setValueAt(existencias, i, 5);
+        }
+        
     }
 
     /**
@@ -37,7 +90,7 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextFieldNombre = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaProductos = new javax.swing.JTable();
         lblImagen = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -78,18 +131,8 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Nombre:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        tablaProductos.setModel(modeloTabla);
+        jScrollPane1.setViewportView(tablaProductos);
 
         lblImagen.setText("jLabel4");
 
@@ -245,12 +288,12 @@ public class InventariosFrame extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextFieldBuscar;
     private javax.swing.JTextField jTextFieldClave;
     private javax.swing.JTextField jTextFieldIngresar;
     private javax.swing.JTextField jTextFieldNombre;
     private javax.swing.JLabel lblImagen;
+    private javax.swing.JTable tablaProductos;
     // End of variables declaration//GEN-END:variables
 }
