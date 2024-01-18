@@ -124,6 +124,10 @@ public class Producto {
     public void setIdProveedor(int idProveedor) {
         this.idProveedor = idProveedor;
     }
-
+    
+    @Override
+    public String toString(){
+        return this.idProducto;
+    }
     
 }

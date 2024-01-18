@@ -185,6 +185,34 @@ public class BaseDatos {
         
     }
     
+    public void actualizarInventario(Producto producto, double cantidad){
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
+            
+            String sql = "UPDATE cat_productos SET existencias_prod = ?"
+                    + "WHERE id_prod = ?";
+            st = conn.prepareStatement(sql);
+            
+            st.setDouble(1, cantidad);
+            st.setString(2, producto.getIdProducto());
+            
+            st.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        finally{
+            try {
+                st.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            
+        }
+    }
+    
     public ArrayList<Producto> obtenerProductos (){
         // lista de productos
         ArrayList<Producto> listaProductos = new ArrayList<Producto>();
@@ -192,7 +220,7 @@ public class BaseDatos {
         try {
             conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
             
-            String sql = "SELECT * FROM cat_productos";
+            String sql = "SELECT * FROM cat_productos ORDER BY nombre_prod";
             
             st = conn.prepareStatement(sql);
             
