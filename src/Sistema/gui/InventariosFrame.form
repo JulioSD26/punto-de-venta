@@ -60,7 +60,7 @@
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="btnAgregarExistencias" min="-2" pref="85" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jTextFieldBuscar" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
+                                  <Component id="campoBuscar" alignment="0" min="-2" pref="136" max="-2" attributes="0"/>
                                   <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
@@ -72,8 +72,8 @@
               </Group>
               <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jButton4" min="-2" pref="100" max="-2" attributes="0"/>
-                  <Component id="jButton5" min="-2" pref="100" max="-2" attributes="0"/>
+                  <Component id="btnBorrarProd" min="-2" pref="100" max="-2" attributes="0"/>
+                  <Component id="btnModificarProd" min="-2" pref="100" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
           </Group>
@@ -120,7 +120,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jTextFieldBuscar" min="-2" pref="36" max="-2" attributes="0"/>
+                      <Component id="campoBuscar" min="-2" pref="36" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -131,9 +131,9 @@
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton5" min="-2" pref="80" max="-2" attributes="0"/>
+                      <Component id="btnModificarProd" min="-2" pref="80" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jButton4" min="-2" pref="80" max="-2" attributes="0"/>
+                      <Component id="btnBorrarProd" min="-2" pref="80" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -221,7 +221,10 @@
         <Property name="text" type="java.lang.String" value="Buscar:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldBuscar">
+    <Component class="javax.swing.JTextField" name="campoBuscar">
+      <Events>
+        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="campoBuscarKeyReleased"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
@@ -230,12 +233,15 @@
     </Component>
     <Component class="javax.swing.JTextField" name="campoAgregarExistencia">
     </Component>
-    <Component class="javax.swing.JButton" name="jButton4">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jButton4"/>
-      </Properties>
+    <Component class="javax.swing.JButton" name="btnBorrarProd">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBorrarProdActionPerformed"/>
+      </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton5">
+    <Component class="javax.swing.JButton" name="btnModificarProd">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnModificarProdActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnAgregarExistencias">
       <Properties>

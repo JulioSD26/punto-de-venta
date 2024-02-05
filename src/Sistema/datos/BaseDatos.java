@@ -1,9 +1,11 @@
 package sistema.datos;
 
 import Sistema.pojos.*;
+import java.io.File;
 import java.sql.Statement;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -194,7 +196,7 @@ public class BaseDatos {
             
             String sql = "UPDATE cat_productos SET existencias_prod = ?"
                     + "WHERE id_prod = ?";
-            st = conn.prepareStatement(sql);
+            prepSt = conn.prepareStatement(sql);
             
             prepSt.setDouble(1, cantidad);
             prepSt.setString(2, producto.getIdProducto());
@@ -276,8 +278,10 @@ public class BaseDatos {
                     + "OR nombre_prod LIKE '%"+ criterio +"%'"
                     + "ORDER BY nombre_prod";
             
-              prepSt = conn.prepareStatement(sql);
-              rs = prepSt.executeQuery();
+//              prepSt = conn.prepareStatement(sql);
+//              rs = prepSt.executeQuery();
+                st = conn.createStatement();
+                rs = st.executeQuery(sql);
             
             while(rs.next()){
                 String id = rs.getString("id_prod");
@@ -305,8 +309,8 @@ public class BaseDatos {
         }
         finally{
             try {
-//                st.close();
-                prepSt.close();
+                st.close();
+//                prepSt.close();
                 conn.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -356,7 +360,7 @@ public class BaseDatos {
         return listaCategorias;
     }
     
-     public ArrayList<Proveedor> obtenerProveedores (){
+    public ArrayList<Proveedor> obtenerProveedores (){
         // lista de productos
         ArrayList<Proveedor> listaProveedores = new ArrayList<Proveedor>();
         
@@ -398,12 +402,109 @@ public class BaseDatos {
         }
         return listaProveedores;
     }
+     
+    public void borrarProducto(Producto producto){
+        try {
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
+            
+            String sql = "DELETE FROM cat_productos WHERE id_prod=?";
+            
+            prepSt = conn.prepareStatement(sql);
+            prepSt.setString(1, producto.getIdProducto());
+            
+            prepSt.executeUpdate();
+            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        finally{
+            try {
+                prepSt.close();
+                conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    } 
+    
+    public InputStream buscarFoto(Producto producto){
+        InputStream streamFoto = null;
+        
+        try{
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
+            
+            String sql = "SELECT foto_prod FROM cat_productos WHERE id_prod=?";
+            
+            prepSt = conn.prepareStatement(sql);
+            prepSt.setString(1, producto.getIdProducto());
+            
+            rs = prepSt.executeQuery();
+            
+            while(rs.next()){
+                streamFoto = rs.getBinaryStream("foto_prod");
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return streamFoto;
+    }
+    
+    public void actualizarProducto(Producto producto, boolean cambiarFoto){
+        try{
+            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/db-sistema", "postgres", "admin");
+            
+            if (cambiarFoto==true) {
+                File fileFoto = producto.getFotoProducto();
+                FileInputStream fis = new FileInputStream(fileFoto);
+                
+                String sql = "UPDATE cat_producto SET desc_prod=?, stock_prod=?, foto_prod=?, unidad_prod=?"
+                        + "precio_compra_prod=?, precio_venta_prod=?, id_categoria_prod=?, id_proveedor=?"
+                        + "WHERE id_prod=?";
+                
+                prepSt = conn.prepareStatement(sql);
+                
+                prepSt.setString(1, producto.getDescProducto());
+                prepSt.setDouble(2, producto.getStockProducto());
+                long tamanoFoto = fileFoto.length();
+                prepSt.setBinaryStream(3, fis, tamanoFoto);
+                prepSt.setString(4, producto.getUnidadProducto());
+                prepSt.setDouble(5, producto.getPrecioCompraProducto());
+                prepSt.setDouble(6, producto.getPrecioVentaProducto());
+                prepSt.setInt(7, producto.getIdCategoria());
+                prepSt.setInt(8, producto.getIdProveedor());
+                prepSt.setString(9, producto.getIdProducto());  
+            }else{
+                String sql = "UPDATE cat_producto SET desc_prod=?, stock_prod=?, unidad_prod=?"
+                        + "precio_compra_prod=?, precio_venta_prod=?, id_categoria_prod=?, id_proveedor=?"
+                        + "WHERE id_prod=?";
+                
+                prepSt = conn.prepareStatement(sql);
+                
+                prepSt.setString(1, producto.getDescProducto());
+                prepSt.setDouble(2, producto.getStockProducto());
+                prepSt.setString(3, producto.getUnidadProducto());
+                prepSt.setDouble(4, producto.getPrecioCompraProducto());
+                prepSt.setDouble(5, producto.getPrecioVentaProducto());
+                prepSt.setInt(6, producto.getIdCategoria());
+                prepSt.setInt(7, producto.getIdProveedor());
+                prepSt.setString(8, producto.getIdProducto());  
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     // PROBAR BASE DE DATOS
 //    public static void main(String[] args) {
-//        CategoriaProd categoria = new CategoriaProd(4, "Categoria de prueba", "Descripcion de la categoria de prueba");
-//        
+////        CategoriaProd categoria = new CategoriaProd(4, "Categoria de prueba", "Descripcion de la categoria de prueba");
+//        Producto producto = new Producto("12678", "Doritos", "Doritos de 120g", 32, null, "gramos", 20, 28, 55, 2, 1);
 //        BaseDatos base = new BaseDatos();
 //        
-//        base.insertarCategoriaProducto(categoria);
+//        base.insertarProducto(producto);
 //    }
 }
